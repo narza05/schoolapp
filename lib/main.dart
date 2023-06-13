@@ -4,6 +4,8 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:schoolapp/constants.dart';
 import 'package:schoolapp/home/home.dart';
 import 'package:schoolapp/navigation.dart';
+import 'package:schoolapp/notes/add_notes.dart';
+import 'package:schoolapp/notes/all_notes.dart';
 import 'package:schoolapp/pre_home/register.dart';
 
 void main() {
@@ -22,10 +24,6 @@ class _SchoolAppState extends State<SchoolApp> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Constants.myBlue,
-        statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: Constants.backgroundgrey));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Navigation(),

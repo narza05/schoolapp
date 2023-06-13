@@ -2,10 +2,10 @@ import 'package:flutter/services.dart';
 import 'package:schoolapp/imports.dart';
 import 'package:zego_uikit_prebuilt_video_conference/zego_uikit_prebuilt_video_conference.dart';
 
-class VideoConferencePage extends StatelessWidget {
+class Live extends StatelessWidget {
   final String conferenceID;
 
-  const VideoConferencePage({
+  const Live({
     Key? key,
     required this.conferenceID,
   }) : super(key: key);
