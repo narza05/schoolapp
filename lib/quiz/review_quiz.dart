@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:schoolapp/imports.dart';
 import 'package:schoolapp/quiz/quiz_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:toast/toast.dart';
+import 'package:toast/toast.dart' as Toast;
 
 class ReviewQuiz extends StatefulWidget {
   List<QuizModel> list = [];
@@ -41,9 +45,27 @@ class _ReviewQuizState extends State<ReviewQuiz> {
     }
   }
 
-  addQuiz(String qus, String opt1, String opt2, String opt3, String opt4, String ans)async{
+  quizExists(int quizId)async{
+    var response = await http.get(Uri.parse(Constants.QUIZ_EXISTS+"?quiz_id=$quizId"));
+    if(response.statusCode==200){
+      var data = jsonDecode(response.body);
+      if(data['msg'] == "1"){
+        for (var obj in widget.list) {
+          addQuiz(quizId,
+              obj.qus, obj.opt1, obj.opt2, obj.opt3,
+              obj.opt4, obj.ans);
+        }
+      }else{
+        Toast.Toast.show("Try again");
+      }
+    }
+  }
+
+  addQuiz(int quizId, String qus, String opt1, String opt2, String opt3, String opt4, String ans)async{
+    print(1);
     var response = await http.post(Uri.parse(Constants.ADD_QUIZ), body: {
-      "title" : Constants.getCurrentDate(),
+      "date" : Constants.getCurrentDate(),
+      "quiz_id" : quizId.toString(),
       "title" : title.text,
       "subject" : subject.text,
       "qus" : qus,
@@ -53,6 +75,21 @@ class _ReviewQuizState extends State<ReviewQuiz> {
       "opt4" : opt4,
       "ans" : ans
     });
+
+    if(response.statusCode==200){
+      var data = jsonDecode(response.body);
+      if(data['msg'] == "1"){
+        Toast.Toast.show("Quiz Added");
+        title.clear();
+        subject.clear();
+        widget.list.clear();
+        var nav = Navigator.of(context);
+        nav.pop();
+        nav.pop();
+      }
+    }else{
+      Toast.Toast.show("Error");
+    }
   }
 
   @override
@@ -63,6 +100,7 @@ class _ReviewQuizState extends State<ReviewQuiz> {
 
   @override
   Widget build(BuildContext context) {
+    Toast.ToastContext().init(context);
     return WillPopScope(
         child: ConstantsWidget.getBasicScreen(
             context,
@@ -152,12 +190,10 @@ class _ReviewQuizState extends State<ReviewQuiz> {
                             GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  if(widget.list.length>0 && title.text.isNotEmpty && subject.text.isNotEmpty) {
-                                    for (var obj in widget.list) {
-                                      addQuiz(
-                                          obj.qus, obj.opt1, obj.opt2, obj.opt3,
-                                          obj.opt4, obj.ans);
-                                    }
+                                  if(widget.list.isNotEmpty && title.text.isNotEmpty && subject.text.isNotEmpty) {
+                                    Random random = new Random();
+                                    int quizId = random.nextInt(10000);
+                                    quizExists(quizId);
                                   }
                                 });
                               },

@@ -7,6 +7,9 @@ import 'package:schoolapp/navigation.dart';
 import 'package:schoolapp/notes/add_notes.dart';
 import 'package:schoolapp/notes/all_notes.dart';
 import 'package:schoolapp/pre_home/register.dart';
+import 'package:schoolapp/quiz/all_quiz.dart';
+import 'package:schoolapp/quiz/quiz.dart';
+import 'package:schoolapp/quiz/submitted_quiz.dart';
 
 void main() {
   runApp(const SchoolApp());
@@ -26,7 +29,7 @@ class _SchoolAppState extends State<SchoolApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Navigation(),
+      home: SubmittedQuiz("1205"),
     );
   }
 }

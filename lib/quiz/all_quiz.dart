@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:schoolapp/imports.dart';
 import 'package:schoolapp/quiz/add_quiz.dart';
+import 'package:http/http.dart' as http;
+import 'package:schoolapp/quiz/quiz.dart';
+import 'package:schoolapp/quiz/quiz_model.dart';
 
 class AllQuiz extends StatefulWidget {
   const AllQuiz({super.key});
@@ -11,26 +16,74 @@ class AllQuiz extends StatefulWidget {
 class _AllQuizState extends State<AllQuiz> {
   bool scrolled = false;
   var contoller = ScrollController();
-
+  List<QuizModel> list = [];
+  List<QuizModel> submittedList = [];
 
   @override
   void initState() {
     super.initState();
+    listListener();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // getAllQuiz();
+      getSubmittedQuiz();
+    });
+  }
+
+  listListener() {
     contoller.addListener(() {
-      if(contoller.position.pixels == contoller.position.maxScrollExtent){
-        if(scrolled==false){
+      if (contoller.position.pixels == contoller.position.maxScrollExtent) {
+        if (scrolled == false) {
           setState(() {
             scrolled = true;
           });
         }
-      }else{
-        if(scrolled==true && contoller.position.pixels < contoller.position.maxScrollExtent){
+      } else {
+        if (scrolled == true &&
+            contoller.position.pixels < contoller.position.maxScrollExtent) {
           setState(() {
             scrolled = false;
           });
         }
       }
     });
+  }
+
+  getSubmittedQuiz() async {
+    var response =
+        await http.get(Uri.parse(Constants.GET_SUBMITTED_QUIZ + "?std_no=123"));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      for (var obj in data) {
+        submittedList.add(QuizModel("", "", obj['quiz_id'].toString(), "", "",
+            "", "", "", "", "", "", "", ""));
+        print(obj['quiz_id']);
+      }
+      getAllQuiz();
+    }
+  }
+
+  getAllQuiz() async {
+    var response = await http.get(Uri.parse(Constants.GET_ALLQUIZ));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      for (var obj in data) {
+        list.add(QuizModel("", obj['date'], obj['id'].toString(), obj['title'],
+            obj['subject'], "", "", "", "", "", "", "",""));
+      }
+      print(list.length);
+
+
+      for (int a = 0; a < list.length; a++){
+        for(int b=0; b<submittedList.length; b++){
+          if(list[a].quizId.contains(submittedList[b].quizId)){
+            list.add(QuizModel("", list[a].date, list[a].quizId.toString(), list[a].title,
+                list[a].subject, "", "", "", "", "", "", "","true"));
+            list.removeAt(a);
+          }
+        }
+      }
+      print(list.length);
+    }
   }
 
   @override
@@ -47,65 +100,73 @@ class _AllQuizState extends State<AllQuiz> {
                     child: ScrollConfiguration(
                       behavior: ScrollBehavior().copyWith(overscroll: false),
                       child: ListView.builder(
-                        controller: contoller,
-                          itemCount: 15,
+                          controller: contoller,
+                          itemCount: list.length,
                           itemBuilder: (context, position) {
-                            return Container(
-                              margin:
-                                  EdgeInsets.only(left: 10, right: 10, top: 20),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
-                              decoration: BoxDecoration(
-                                  color: Constants.mygrey,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 5,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(
-                                          "Quiz Name",
-                                          style: TextStyle(
-                                            fontFamily: "Poppins",
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return Quiz(list[position].quizId);
+                                }));
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    left: 10, right: 10, top: 20),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                decoration: BoxDecoration(
+                                    color: Constants.mygrey,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 7,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(
+                                            list[position].title,
+                                            style: TextStyle(
+                                              fontFamily: "Poppins",
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          "Biology",
+                                          Text(
+                                            list[position].subject,
+                                            style: TextStyle(
+                                              fontFamily: "Poppins",
+                                              fontSize: 12,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        decoration: BoxDecoration(
+                                            color: Constants.myBlue,
+                                            borderRadius:
+                                                BorderRadius.circular(40)),
+                                        child: Center(
+                                            child: Text( list[position].isSubmitted == "" ?
+                                          "Start" : "Review",
                                           style: TextStyle(
-                                            fontFamily: "Poppins",
-                                            fontSize: 12,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 10),
-                                      decoration: BoxDecoration(
-                                          color: Constants.myBlue,
-                                          borderRadius:
-                                              BorderRadius.circular(40)),
-                                      child: Center(
-                                          child: Text(
-                                        "Start",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: "Poppins",
-                                            fontSize: 11),
-                                      )),
-                                    ),
-                                  )
-                                ],
+                                              color: Colors.white,
+                                              fontFamily: "Poppins",
+                                              fontSize: 11),
+                                        )),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             );
                           }),
@@ -121,8 +182,9 @@ class _AllQuizState extends State<AllQuiz> {
                 height: scrolled ? 0 : 40,
                 duration: Duration(milliseconds: 200),
                 child: GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
                       return AddQuiz();
                     }));
                   },
@@ -133,10 +195,10 @@ class _AllQuizState extends State<AllQuiz> {
                         borderRadius: BorderRadius.circular(40)),
                     child: Center(
                         child: Text(
-                          "Add Quiz",
-                          style:
+                      "Add Quiz",
+                      style:
                           TextStyle(fontFamily: "Poppins", color: Colors.white),
-                        )),
+                    )),
                   ),
                 ),
               ),

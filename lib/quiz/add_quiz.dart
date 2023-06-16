@@ -58,8 +58,8 @@ class _AddQuizState extends State<AddQuiz> {
                 child: Row(
                   children: [
                     bottomButton("Add Question", () {
-                      list.add(QuizModel(qus.text, opt1.text, opt2.text,
-                          opt3.text, opt4.text, radioValue.toString()));
+                      list.add(QuizModel("","","","","",qus.text, opt1.text, opt2.text,
+                          opt3.text, opt4.text, radioValue.toString(),"",""));
                       Toast.Toast.show("Added");
                     }),
                     SizedBox(
@@ -112,7 +112,6 @@ class _AddQuizState extends State<AddQuiz> {
             onChanged: (value) {
               setState(() {
                 radioValue = value!;
-                print(radioValue);
               });
             }),
         Expanded(child: textfield(controller, hint)),

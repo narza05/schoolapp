@@ -10,6 +10,12 @@ class Constants{
   static final String ADD_NOTES = ROOT + "notes/addNotes.php";
   static final String GET_NOTES = ROOT + "notes/getNotes.php";
   static final String ADD_QUIZ = ROOT + "quiz/addQuiz.php";
+  static final String GET_ALLQUIZ = ROOT + "quiz/getAllQuiz.php";
+  static final String GET_QUIZ = ROOT + "quiz/getQuiz.php";
+  static final String QUIZ_EXISTS = ROOT + "quiz/quizExists.php";
+  static final String SUBMIT_QUIZ = ROOT + "quiz/submitQuiz.php";
+  static final String GET_SUBMITTED_QUIZ = ROOT + "quiz/getSubmittedQuiz.php";
+  static final String GET_SUBMITTED_ANSWER = ROOT + "quiz/getSubmittedAnswer.php";
 
 
   static final Color backgroundgrey = Color(0xfff8f8f8);
@@ -30,7 +36,7 @@ class Constants{
      return width;
   }
 
-  static getCurrentDate(){
+  static  getCurrentDate(){
     return DateFormat("yyyy-MM-dd").format(DateTime.now());
   }
   static getCurrentTime(){
