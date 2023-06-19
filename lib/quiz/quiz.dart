@@ -5,10 +5,15 @@ import 'package:schoolapp/quiz/quiz_model.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 import 'package:http/http.dart' as http;
 
+import '../navigation.dart';
+
 class Quiz extends StatefulWidget {
   String quizId;
+  String date;
+  String title;
+  String subject;
 
-  Quiz(this.quizId);
+  Quiz(this.quizId, this.date, this.title, this.subject);
 
   @override
   State<Quiz> createState() => _QuizState();
@@ -22,6 +27,7 @@ class _QuizState extends State<Quiz> {
   bool isStart = false;
   bool isFinished = false;
 
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -29,6 +35,7 @@ class _QuizState extends State<Quiz> {
     });
     super.initState();
   }
+
 
   getQuiz() async {
     showDialog(
@@ -57,21 +64,36 @@ class _QuizState extends State<Quiz> {
     for(int i=0; i<responseList.length; i++){
       var response = await http.post(Uri.parse(Constants.SUBMIT_QUIZ), body: {
         "std_no" : "123",
+        "date" : widget.date,
         "quiz_id" : widget.quizId,
+        "title" : widget.title,
+        "subject" : widget.subject,
         "qus" : responseList[i].qus,
         "response" : responseList[i].response,
         "ans" : responseList[i].ans
       });
       if(i==responseList.length-1){
         if(response.statusCode==200 && response.body == "1"){
-          Toast.Toast.show("Submitted");
+          addResult();
         }
       }
     }
-
-
   }
 
+  addResult() async {
+    var response = await http.get(Uri.parse(Constants.ADD_RESULT+"?std_no=123&quiz_id="+widget.quizId));
+    if(response.statusCode==200){
+      if(response.body.contains("1")){
+        Toast.Toast.show("Submitted");
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+          return Navigation();
+        }), (route) => false);
+      }
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     Toast.ToastContext().init(context);
     return ConstantsWidget.getBasicScreen(

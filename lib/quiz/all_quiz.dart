@@ -5,6 +5,7 @@ import 'package:schoolapp/quiz/add_quiz.dart';
 import 'package:http/http.dart' as http;
 import 'package:schoolapp/quiz/quiz.dart';
 import 'package:schoolapp/quiz/quiz_model.dart';
+import 'package:schoolapp/quiz/submitted_quiz.dart';
 
 class AllQuiz extends StatefulWidget {
   const AllQuiz({super.key});
@@ -54,8 +55,8 @@ class _AllQuizState extends State<AllQuiz> {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       for (var obj in data) {
-        submittedList.add(QuizModel("", "", obj['quiz_id'].toString(), "", "",
-            "", "", "", "", "", "", "", ""));
+        submittedList.add(QuizModel("", obj['date'], obj['quiz_id'].toString(), obj['title'], obj['subject'],
+            "", "", "", "", "", "", "", "true"));
         print(obj['quiz_id']);
       }
       getAllQuiz();
@@ -65,24 +66,43 @@ class _AllQuizState extends State<AllQuiz> {
   getAllQuiz() async {
     var response = await http.get(Uri.parse(Constants.GET_ALLQUIZ));
     if (response.statusCode == 200) {
+      list.clear();
       var data = jsonDecode(response.body);
       for (var obj in data) {
         list.add(QuizModel("", obj['date'], obj['id'].toString(), obj['title'],
-            obj['subject'], "", "", "", "", "", "", "",""));
+            obj['subject'], "", "", "", "", "", "", "", ""));
       }
-      print(list.length);
 
-
-      for (int a = 0; a < list.length; a++){
-        for(int b=0; b<submittedList.length; b++){
-          if(list[a].quizId.contains(submittedList[b].quizId)){
-            list.add(QuizModel("", list[a].date, list[a].quizId.toString(), list[a].title,
-                list[a].subject, "", "", "", "", "", "", "","true"));
-            list.removeAt(a);
+      for (int a = 0; a < submittedList.length; a++) {
+        for (int b = 0; b < list.length; b++) {
+          if (submittedList[a].quizId.contains(list[b].quizId)) {
+            // list.add(QuizModel(
+            //     "",
+            //     list[a].date,
+            //     list[a].quizId.toString(),
+            //     list[a].title,
+            //     list[a].subject,
+            //     "",
+            //     "",
+            //     "",
+            //     "",
+            //     "",
+            //     "",
+            //     "",
+            //     "true"));
+            list.removeAt(b);
+            break;
+          } else {
+            continue;
           }
         }
       }
-      print(list.length);
+      for (var obj in submittedList) {
+        list.add(obj);
+      }
+      setState(() {
+        list = list;
+      });
     }
   }
 
@@ -104,12 +124,34 @@ class _AllQuizState extends State<AllQuiz> {
                           itemCount: list.length,
                           itemBuilder: (context, position) {
                             return GestureDetector(
-                              onTap: () {
+                              onTap:
+                                  list[position].isSubmitted == ""
+                                      ?
+                                  //     () async {
+                                  //         final bool? refresh =
+                                  //             await Navigator.push(context,
+                                  //                 MaterialPageRoute(
+                                  //                     builder: (context) {
+                                  //           return Quiz(list[position].quizId);
+                                  //         }));
+                                  //         if (refresh == true) {
+                                  //           getAllQuiz();
+                                  //         }
+                                  //       },
+
+                                  () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                  return Quiz(list[position].quizId);
-                                }));
-                              },
+                                  return Quiz(list[position].quizId,list[position].date,list[position].title,list[position].subject);
+                                })).then((value) => getAllQuiz());
+                              }
+                              : () {
+                                  print(list[position].quizId);
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return SubmittedQuiz(list[position].quizId);
+                                  }));
+                                },
                               child: Container(
                                 margin: EdgeInsets.only(
                                     left: 10, right: 10, top: 20),
@@ -156,8 +198,10 @@ class _AllQuizState extends State<AllQuiz> {
                                             borderRadius:
                                                 BorderRadius.circular(40)),
                                         child: Center(
-                                            child: Text( list[position].isSubmitted == "" ?
-                                          "Start" : "Review",
+                                            child: Text(
+                                          list[position].isSubmitted == ""
+                                              ? "Start"
+                                              : "Review",
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontFamily: "Poppins",

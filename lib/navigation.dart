@@ -1,4 +1,6 @@
 import 'package:flutter/services.dart';
+import 'package:schoolapp/Notifications/notifications.dart';
+import 'package:schoolapp/Notifications/notifications.dart';
 import 'package:schoolapp/imports.dart';
 
 import 'live/start_live.dart';
@@ -12,14 +14,16 @@ class Navigation extends StatefulWidget {
 
 class _NavigationState extends State<Navigation> {
   int screenIndex = 0;
-  List screens = [Home(), StartLive()];
+  List screens = [Home(), StartLive(), Notifications()];
   List appbarColors = [
     Constants.myBlue,
   ];
 
   PageController _pageController = PageController(
     initialPage: 0,
+    viewportFraction: 0.9999
   );
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,7 @@ class _NavigationState extends State<Navigation> {
           bottomNavigationBar: BottomNavigationBar(
               selectedItemColor: Colors.black,
               unselectedItemColor: Colors.grey,
-              showUnselectedLabels: false,
+              showUnselectedLabels: true,
               showSelectedLabels: false,
               currentIndex: screenIndex,
               onTap: (value) {
@@ -49,9 +53,9 @@ class _NavigationState extends State<Navigation> {
               },
               items: [
                 BottomNavigationBarItem(icon: Icon(Icons.home_outlined,size: 17,), label: "Home"),
-                BottomNavigationBarItem(icon: Icon(Icons.live_tv,size: 17,), label: "Home"),
-                BottomNavigationBarItem(icon: Icon(Icons.message,size: 17,), label: "Home"),
-                BottomNavigationBarItem(icon: Icon(Icons.person,size: 17,), label: "Home"),
+                BottomNavigationBarItem(icon: Icon(Icons.live_tv,size: 17,), label: "Live"),
+                BottomNavigationBarItem(icon: Icon(Icons.notifications,size: 17,), label: "Alert"),
+                BottomNavigationBarItem(icon: Icon(Icons.person,size: 17,), label: "Profile"),
               ]),
           body: ScrollConfiguration(
             behavior: ScrollBehavior().copyWith(overscroll: false),
@@ -63,8 +67,9 @@ class _NavigationState extends State<Navigation> {
                 });
               },
               children: <Widget>[
-                Home(),
-                StartLive()
+                Notifications(),
+                StartLive(),
+                Home()
               ],
             ),
           ),

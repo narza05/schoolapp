@@ -58,9 +58,29 @@ class _AddQuizState extends State<AddQuiz> {
                 child: Row(
                   children: [
                     bottomButton("Add Question", () {
-                      list.add(QuizModel("","","","","",qus.text, opt1.text, opt2.text,
-                          opt3.text, opt4.text, radioValue.toString(),"",""));
-                      Toast.Toast.show("Added");
+                      if (opt1.text.isNotEmpty &&
+                          opt2.text.isNotEmpty &&
+                          opt3.text.isNotEmpty &&
+                          opt4.text.isNotEmpty &&
+                          qus.text.isNotEmpty) {
+                        list.add(QuizModel(
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            qus.text,
+                            opt1.text,
+                            opt2.text,
+                            opt3.text,
+                            opt4.text,
+                            radioValue.toString(),
+                            "",
+                            ""));
+                        Toast.Toast.show("Added");
+                      }else{
+                        Toast.Toast.show("Empty Field");
+                      }
                     }),
                     SizedBox(
                       width: 10,

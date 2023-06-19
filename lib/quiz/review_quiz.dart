@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:schoolapp/imports.dart';
+import 'package:schoolapp/navigation.dart';
 import 'package:schoolapp/quiz/quiz_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
@@ -45,7 +46,10 @@ class _ReviewQuizState extends State<ReviewQuiz> {
     }
   }
 
-  quizExists(int quizId)async{
+  quizExists()async{
+
+    Random random = new Random();
+    int quizId = random.nextInt(10000);
     var response = await http.get(Uri.parse(Constants.QUIZ_EXISTS+"?quiz_id=$quizId"));
     if(response.statusCode==200){
       var data = jsonDecode(response.body);
@@ -56,7 +60,7 @@ class _ReviewQuizState extends State<ReviewQuiz> {
               obj.opt4, obj.ans);
         }
       }else{
-        Toast.Toast.show("Try again");
+        quizExists();
       }
     }
   }
@@ -83,9 +87,9 @@ class _ReviewQuizState extends State<ReviewQuiz> {
         title.clear();
         subject.clear();
         widget.list.clear();
-        var nav = Navigator.of(context);
-        nav.pop();
-        nav.pop();
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+          return Navigation();
+        }), (route) => false);
       }
     }else{
       Toast.Toast.show("Error");
@@ -191,9 +195,8 @@ class _ReviewQuizState extends State<ReviewQuiz> {
                               onTap: () {
                                 setState(() {
                                   if(widget.list.isNotEmpty && title.text.isNotEmpty && subject.text.isNotEmpty) {
-                                    Random random = new Random();
-                                    int quizId = random.nextInt(10000);
-                                    quizExists(quizId);
+
+                                    quizExists();
                                   }
                                 });
                               },
@@ -231,7 +234,7 @@ class _ReviewQuizState extends State<ReviewQuiz> {
               ],
             )),
         onWillPop: () {
-          Navigator.pop(context, "widget.list");
+          Navigator.pop(context, widget.list);
           return new Future(() => false);
         });
   }

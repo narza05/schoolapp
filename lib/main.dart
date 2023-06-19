@@ -29,7 +29,7 @@ class _SchoolAppState extends State<SchoolApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SubmittedQuiz("1205"),
+      home: Navigation(),
     );
   }
 }

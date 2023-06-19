@@ -17,6 +17,11 @@ class SubmittedQuiz extends StatefulWidget {
 class _SubmittedQuizState extends State<SubmittedQuiz> {
   List<QuizModel> list = [];
   List<QuizModel> responseList = [];
+  List<int> topList = [];
+  int total = 0;
+  int correct = 0;
+  int incorrect = 0;
+  int i = 0;
 
   @override
   void initState() {
@@ -48,17 +53,38 @@ class _SubmittedQuizState extends State<SubmittedQuiz> {
 
   getSubmittedAnswer() async {
     var response = await http.get(
-        Uri.parse(Constants.GET_SUBMITTED_ANSWER + "?quiz_id=1205&std_no=123"));
+        Uri.parse(Constants.GET_SUBMITTED_ANSWER + "?quiz_id="+widget.quizId+"&std_no=123"));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       for (var obj in data) {
         responseList.add(QuizModel("", "", "", "", "", "", "", "", "", "", "",
             obj['response'].toString(), ""));
-        print(obj['response']);
       }
+
+      for (int i = 0; i < responseList.length; i++) {
+        if (list[i].ans == responseList[i].response) {
+          print("object");
+          correct++;
+        }
+      }
+      getTopResult();
+    }
+  }
+
+  getTopResult() async {
+    var response = await http
+        .get(Uri.parse(Constants.GET_TOP_RESULT + "?quiz_id=" + widget.quizId));
+    if(response.statusCode==200){
+      var data = jsonDecode(response.body);
+      for(var obj in data){
+        topList.add(obj['score']);
+      }
+      print(topList.length);
       setState(() {
+        correct = correct;
         list = list;
         responseList = responseList;
+        topList = topList;
       });
     }
   }
@@ -108,19 +134,48 @@ class _SubmittedQuizState extends State<SubmittedQuiz> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       positions(
-                          60, Colors.black38, 80, 25, "Ankush Saini", "224"),
+                          60, Colors.black38, 80, 25, "Ankush Saini", topList.length>0 ? "${topList[0]}" : "0"),
                       positions(
-                          90, Colors.amber, 110, 25, "Ankush Saini", "256"),
+                          90, Colors.amber, 110, 25, "Ankush Saini", topList.length>1 ? "${topList[1]}" : "0"),
                       positions(
-                          60, Colors.brown, 80, 25, "Ankush Saini", "200"),
+                          60, Colors.brown, 80, 25, "Ankush Saini", topList.length>2 ? "${topList[2]}" : "0"),
                     ],
                   ),
                 ],
               ),
             ),
             Container(
-              height: 120,
-              decoration: BoxDecoration(color: Colors.grey),
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              width: double.infinity,
+              height: 130,
+              decoration: BoxDecoration(
+                  color: Constants.myBluefaded,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Your Score",
+                    style: TextStyle(
+                        fontFamily: "Poppins",
+                        letterSpacing: 3,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      score("${responseList.length}", "Total", Colors.blue),
+                      score("${correct}", "Correct", Colors.green),
+                      score("${responseList.length - correct}", "Incorrect",
+                          Colors.red),
+                    ],
+                  )
+                ],
+              ),
             ),
             Container(
               height: 0.4,
@@ -169,7 +224,7 @@ class _SubmittedQuizState extends State<SubmittedQuiz> {
                                   style: TextStyle(
                                       fontFamily: "Poppins",
                                       color: Colors.black,
-                                      fontSize: 20,
+                                      fontSize: 17,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
@@ -204,6 +259,34 @@ class _SubmittedQuizState extends State<SubmittedQuiz> {
             ),
           ],
         ));
+  }
+
+  Expanded score(String count, String text, Color color) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          children: [
+            Text(
+              count,
+              style: TextStyle(fontSize: 12, fontFamily: "Poppins"),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                  color: color, borderRadius: BorderRadius.circular(30)),
+              child: Center(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                      fontSize: 12, fontFamily: "Poppins", color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Column positions(double iconsize, Color color, double conWidth,

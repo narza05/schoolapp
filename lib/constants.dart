@@ -14,8 +14,10 @@ class Constants{
   static final String GET_QUIZ = ROOT + "quiz/getQuiz.php";
   static final String QUIZ_EXISTS = ROOT + "quiz/quizExists.php";
   static final String SUBMIT_QUIZ = ROOT + "quiz/submitQuiz.php";
+  static final String ADD_RESULT = ROOT + "quiz/addResult.php";
   static final String GET_SUBMITTED_QUIZ = ROOT + "quiz/getSubmittedQuiz.php";
   static final String GET_SUBMITTED_ANSWER = ROOT + "quiz/getSubmittedAnswer.php";
+  static final String GET_TOP_RESULT = ROOT + "quiz/getTopResult.php";
 
 
   static final Color backgroundgrey = Color(0xfff8f8f8);
