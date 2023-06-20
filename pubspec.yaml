@@ -23,6 +23,7 @@ dependencies:
   flutter_cached_pdfview: ^0.4.1
   photo_view: ^0.14.0
   slide_countdown: ^0.6.0
+  firebase_messaging: ^14.6.3
 
 dependency_overrides:
   win32: ^5.0.0

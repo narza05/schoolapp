@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:schoolapp/imports.dart';
 import 'package:toast/toast.dart' as Toast;
 
@@ -9,6 +10,18 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getToken();
+  }
+
+  getToken() async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    print(fcmToken);
+  }
+
   @override
   Widget build(BuildContext context) {
     ConstantsWidget.getStatusBar(Constants.myBlue, Brightness.light);
@@ -70,8 +83,7 @@ class _NotificationsState extends State<Notifications> {
                                 textAlign: TextAlign.center,
                                 "2d",
                                 style: TextStyle(
-                                    fontSize: 11,
-                                    fontFamily: "Poppins"),
+                                    fontSize: 11, fontFamily: "Poppins"),
                               )),
                         ],
                       ),

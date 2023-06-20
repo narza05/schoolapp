@@ -10,6 +10,7 @@ import 'package:schoolapp/pre_home/register.dart';
 import 'package:schoolapp/quiz/all_quiz.dart';
 import 'package:schoolapp/quiz/quiz.dart';
 import 'package:schoolapp/quiz/submitted_quiz.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() {
   runApp(const SchoolApp());
