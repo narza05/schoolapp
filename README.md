@@ -1,16 +1,24 @@
-# schoolapp
+# Institute App
 
-A new Flutter project.
+<p><img src="https://github.com/narza05/schoolapp/blob/master/assets/WhatsApp%20Image%202023-06-23%20at%2022.47.04.jpeg" width="220" alt="accessibility text" style="margin-right: 10px;"/>
+  <img src="https://github.com/narza05/schoolapp/blob/master/assets/WhatsApp%20Image%202023-06-23%20at%2022.47.03.jpeg" width="220" alt="accessibility text"style="margin-right: 10px;"/></p>
 
-## Getting Started
+## Discription: 
 
-This project is a starting point for a Flutter application.
+* An application used to manage an Institute's tasks effectivily. With features like Notes, Courses, Quiz, Conference etc. 
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies Used: 
+* flutter 
+* Php
+* Sql 
+* Firebase
+* Xampp
+* Android Studio
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Features: 
+
+*  
+
+
