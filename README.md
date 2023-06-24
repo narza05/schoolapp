@@ -1,7 +1,17 @@
 # Institute App
 
 <p><img src="https://github.com/narza05/schoolapp/blob/master/assets/WhatsApp%20Image%202023-06-23%20at%2022.47.04.jpeg" width="220" alt="accessibility text" style="margin-right: 10px;"/>
-  <img src="https://github.com/narza05/schoolapp/blob/master/assets/WhatsApp%20Image%202023-06-23%20at%2022.47.03.jpeg" width="220" alt="accessibility text"style="margin-right: 10px;"/></p>
+  <img src="https://github.com/narza05/schoolapp/blob/master/assets/WhatsApp%20Image%202023-06-23%20at%2022.47.03.jpeg" width="220" alt="accessibility text"style="margin-right: 10px;"/>
+    <img src="https://github.com/narza05/schoolapp/blob/master/assets/WhatsApp%20Image%202023-06-24%20at%2018.09.55.jpeg" width="220" alt="accessibility text"style="margin-right: 10px;"/>
+  <img src="https://github.com/narza05/schoolapp/blob/master/assets/WhatsApp%20Image%202023-06-24%20at%2018.09.54%20(2).jpeg" width="220" alt="accessibility text"style="margin-right: 10px;"/>
+  <img src="https://github.com/narza05/schoolapp/blob/master/assets/WhatsApp%20Image%202023-06-24%20at%2018.09.54%20(1).jpeg" width="220" alt="accessibility text"style="margin-right: 10px;"/>
+  <img src="https://github.com/narza05/schoolapp/blob/master/assets/WhatsApp%20Image%202023-06-24%20at%2018.09.54.jpeg" width="220" alt="accessibility text"style="margin-right: 10px;"/>
+  
+
+
+
+  
+  </p>
 
 ## Discription: 
 
