@@ -5,7 +5,7 @@
 
 ## Discription: 
 
-* An application used to manage an Institute's tasks effectivily. With features like Notes, Courses, Quiz, Conference etc. 
+* An application used to manage an Institute's tasks effectivily. 
 
 ## Technologies Used: 
 * flutter 
@@ -19,6 +19,12 @@
 
 ## Features: 
 
-*  
+* Course
+* Conference
+* Notes
+* Quiz
+* Homescreen Banner
+
+
 
 
